@@ -452,6 +452,23 @@ type PolicyRepresentation struct {
 	GroupPolicyRepresentation
 }
 
+// UMAPolicyRepresentation is a representation of a Policy
+type UMAPolicyRepresentation struct {
+	//Config           *map[string]string `json:"config,omitempty"`
+	DecisionStrategy *DecisionStrategy `json:"decisionStrategy,omitempty"`
+	Description      *string           `json:"description,omitempty"`
+	ID               *string           `json:"id,omitempty"`
+	Logic            *Logic            `json:"logic,omitempty"`
+	Name             *string           `json:"name,omitempty"`
+	Owner            *string           `json:"owner,omitempty"`
+	//Resource         *string           `json:"resource,omitempty"`
+	Scopes *[]string `json:"scopes,omitempty"`
+	Type   *string   `json:"type,omitempty"`
+	Roles  *[]string `json:"roles,omitempty"`
+	Users  *[]string `json:"users,omitempty"`
+	Groups *[]string `json:"groups,omitempty"`
+}
+
 // RolePolicyRepresentation represents role based policies
 type RolePolicyRepresentation struct {
 	Roles *[]RoleDefinition `json:"roles,omitempty"`
@@ -863,6 +880,16 @@ type GetPolicyParams struct {
 	Name       *string `json:"name,omitempty"`
 	Permission *bool   `json:"permission,string,omitempty"`
 	Type       *string `json:"type,omitempty"`
+}
+
+// GetUMAPolicyParams represents the optional parameters for getting UMA policies
+type GetUMAPolicyParams struct {
+	First      *int    `json:"first,string,omitempty"`
+	Max        *int    `json:"max,string,omitempty"`
+	Name       *string `json:"name,omitempty"`
+	ResourceID *string `json:"resource,omitempty"`
+	Scope      *string `json:"scope,omitempty"`
+	// UMA policy is compulsory of type uma, so no need to specify this field
 }
 
 // GetPermissionParams represents the optional parameters for getting permissions

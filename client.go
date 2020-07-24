@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/segmentio/ksuid"
 
-	"github.com/Nerzal/gocloak/v6/pkg/jwx"
+	"github.com/charlotte-42/gocloak/pkg/jwx"
 )
 
 type gocloak struct {
@@ -1968,6 +1968,10 @@ func (client *gocloak) DeleteIdentityProvider(ctx context.Context, token, realm,
 	return checkForError(resp, err, errMessage)
 }
 
+// ---------------
+// Protection API
+// ---------------
+
 // GetResource returns a client's resource with the given id
 func (client *gocloak) GetResource(ctx context.Context, token, realm, clientID, resourceID string) (*ResourceRepresentation, error) {
 	const errMessage = "could not get resource"
@@ -2300,6 +2304,176 @@ func (client *gocloak) DeletePermission(ctx context.Context, token, realm, clien
 
 	resp, err := client.getRequestWithBearerAuth(ctx, token).
 		Delete(client.getAdminRealmURL(realm, "clients", clientID, "authz", "resource-server", "permission", permissionID))
+
+	return checkForError(resp, err, errMessage)
+}
+
+// ---------------
+// Protection API manageable by resource server
+// ---------------
+
+// GetResourceRS returns a resource with the given id, with token obtained with clientcredentials
+func (client *gocloak) GetResourceRS(ctx context.Context, token, realm, resourceID string) (*ResourceRepresentation, error) {
+	const errMessage = "could not get resource"
+	var result ResourceRepresentation
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetResult(&result).
+		Get(client.getRealmURL(realm, "authz", "protection", "resource_set", resourceID))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// GetResourcesRS returns resources IDs associated with the client. token needs to be obtained with client credentials
+func (client *gocloak) GetResourcesRS(ctx context.Context, token, realm string, params GetResourceParams) ([]*string, error) {
+	{
+		const errMessage = "could not get resources"
+
+		queryParams, err := GetQueryParams(params)
+		if err != nil {
+			return nil, err
+		}
+
+		var result []*string
+		resp, err := client.getRequestWithBearerAuth(ctx, token).
+			SetResult(&result).
+			SetQueryParams(queryParams).
+			Get(client.getRealmURL(realm, "authz", "protection", "resource_set"))
+		//debug : to remove
+		if err != nil {
+			fmt.Println("oups")
+		}
+		if err := checkForError(resp, err, errMessage); err != nil {
+			return nil, err
+		}
+
+		return result, nil
+	}
+
+}
+
+// CreateResource creates a resource associated with the client. token needs to be obtained with client credentials
+func (client *gocloak) CreateResourceRS(ctx context.Context, token, realm string, resource ResourceRepresentation) (*ResourceRepresentation, error) {
+	const errMessage = "could not create resource"
+	var result ResourceRepresentation
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetResult(&result).
+		SetBody(resource).
+		Post(client.getRealmURL(realm, "authz", "protection", "resource_set"))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// UpdateResource updates a resource associated with the client. token needs to be obtained with client credentials
+func (client *gocloak) UpdateResourceRS(ctx context.Context, token, realm string, resource ResourceRepresentation) error {
+	const errMessage = "could not update resource"
+
+	if NilOrEmpty(resource.ID) {
+		return errors.New("ID of a resource required")
+	}
+
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetBody(resource).
+		Put(client.getRealmURL(realm, "authz", "protection", "resource_set", *(resource.ID)))
+
+	return checkForError(resp, err, errMessage)
+}
+
+// DeleteResource deletes a resource associated with the client token needs to be obtained with client credentials
+func (client *gocloak) DeleteResourceRS(ctx context.Context, token, realm string, resourceID string) error {
+	const errMessage = "could not delete resource"
+
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		Delete(client.getRealmURL(realm, "authz", "protection", "resource_set", resourceID))
+
+	return checkForError(resp, err, errMessage)
+}
+
+// GetUMAPolicy returns a client's policy with the given id. token needs to be beared by resource server acting on behalf of resource owner
+func (client *gocloak) GetUMAPolicy(ctx context.Context, token, realm, policyID string) (*UMAPolicyRepresentation, error) {
+	const errMessage = "could not get policy"
+
+	var result UMAPolicyRepresentation
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetResult(&result).
+		Get(client.getRealmURL(realm, "authz", "protection", "uma-policy", policyID))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// GetUMAPolicies returns all policies obtained wrt to particular param (ex filter wrt resource ID)
+func (client *gocloak) GetUMAPolicies(ctx context.Context, token, realm string, params GetUMAPolicyParams) ([]*UMAPolicyRepresentation, error) {
+	const errMessage = "could not get permissions"
+
+	queryParams, err := GetQueryParams(params)
+	if err != nil {
+		return nil, errors.Wrap(err, errMessage)
+	}
+
+	path := []string{"authz", "protection", "uma-policy"}
+
+	var result []*UMAPolicyRepresentation
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetResult(&result).
+		SetQueryParams(queryParams).
+		Get(client.getRealmURL(realm, path...))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// CreateUMAPolicy creates a policy associated with the client and a particular resource. token needs to be beared by resource server acting on behalf of resource owner
+func (client *gocloak) CreateUMAPolicy(ctx context.Context, token, realm string, ResourceID string, policy UMAPolicyRepresentation) (*UMAPolicyRepresentation, error) {
+	const errMessage = "could not create policy"
+
+	var result UMAPolicyRepresentation
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetResult(&result).
+		SetBody(policy).
+		Post(client.getRealmURL(realm, "authz", "protection", "uma-policy", ResourceID))
+
+	if err := checkForError(resp, err, errMessage); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// UpdateUMAPolicy updates a policy associated with the client and a resource. token needs to be beared by resource server acting on behalf of resource owner
+func (client *gocloak) UpdateUMAPolicy(ctx context.Context, token, realm string, policy UMAPolicyRepresentation) error {
+	const errMessage = "could not update policy"
+
+	if NilOrEmpty(policy.ID) {
+		return errors.New("ID of a policy required")
+	}
+
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		SetBody(policy).
+		Put(client.getRealmURL(realm, "authz", "protection", "uma-policy", *(policy.ID)))
+
+	return checkForError(resp, err, errMessage)
+}
+
+// DeleteUMAPpolicy deletes a policy associated with the client and a resource. token needs to be beared by resource server acting on behalf of resource owner
+func (client *gocloak) DeleteUMApolicy(ctx context.Context, token, realm string, policyID string) error {
+	const errMessage = "could not delete policy"
+
+	resp, err := client.getRequestWithBearerAuth(ctx, token).
+		Delete(client.getRealmURL(realm, "authz", "protection", "uma-policy", policyID))
 
 	return checkForError(resp, err, errMessage)
 }

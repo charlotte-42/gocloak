@@ -1,4 +1,4 @@
-module github.com/Nerzal/gocloak/v6
+module github.com/charlotte-42/gocloak/v6
 
 go 1.14
 

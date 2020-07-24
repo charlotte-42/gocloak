@@ -328,6 +328,32 @@ type GoCloak interface {
 	// DeletePermission deletes a permission associated with the client
 	DeletePermission(ctx context.Context, token, realm, clientID, permissionID string) error
 
+	// ***Protection API manageable by resource server***
+	// * Contrarily to their counterpart, these functions do not need tokens with admin rights,
+	// * but rather tokens with resource server and/or resource owner credentials
+
+	// GetResourceRS returns a resource with the given id, with token obtained with clientcredentials
+	GetResourceRS(ctx context.Context, token, realm, resourceID string) (*ResourceRepresentation, error)
+	// GetResourcesRS returns resources IDs associated with the client. token needs to be obtained with client credentials
+	GetResourcesRS(ctx context.Context, token, realm string, params GetResourceParams) ([]*string, error)
+	// CreateResource creates a resource associated with the client. token needs to be obtained with client credentials
+	CreateResourceRS(ctx context.Context, token, realm string, resource ResourceRepresentation) (*ResourceRepresentation, error)
+	// UpdateResource updates a resource associated with the client. token needs to be obtained with client credentials
+	UpdateResourceRS(ctx context.Context, token, realm string, resource ResourceRepresentation) error
+	// DeleteResource deletes a resource associated with the client token needs to be obtained with client credentials
+	DeleteResourceRS(ctx context.Context, token, realm string, resourceID string) error
+
+	// GetUMAPolicy returns a client's policy with the given id. token needs to be beared by resource server acting on behalf of resource owner
+	GetUMAPolicy(ctx context.Context, token, realm, policyID string) (*UMAPolicyRepresentation, error)
+	// GetUMAPolicies returns all policies obtained wrt to particular param (ex you can filter wrt resource ID)
+	GetUMAPolicies(ctx context.Context, token, realm string, params GetUMAPolicyParams) ([]*UMAPolicyRepresentation, error)
+	// CreateUMAPolicy creates a policy associated with the client and a particular resource. token needs to be beared by resource server acting on behalf of resource owner
+	CreateUMAPolicy(ctx context.Context, token, realm string, ResourceID string, policy UMAPolicyRepresentation) (*UMAPolicyRepresentation, error)
+	// UpdateUMAPolicy updates a policy associated with the client and a resource. token needs to be beared by resource server acting on behalf of resource owner
+	UpdateUMAPolicy(ctx context.Context, token, realm string, policy UMAPolicyRepresentation) error
+	// DeleteUMAPpolicy deletes a policy associated with the client and a resource. token needs to be beared by resource server acting on behalf of resource owner
+	DeleteUMApolicy(ctx context.Context, token, realm string, policyID string) error
+
 	// ---------------
 	// Credentials API
 	// ---------------
