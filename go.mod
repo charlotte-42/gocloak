@@ -14,3 +14,4 @@ require (
 )
 
 replace github.com/Nerzal/gocloak => /github.com/charlotte-42/gocloak
+replace github.com/Nerzal/gocloak/v6 => /github.com/charlotte-42/gocloak/v6
