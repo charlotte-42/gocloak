@@ -24,7 +24,7 @@ Benchmarks: https://nerzal.github.io/gocloak/dev/bench/
 
 ## Changelog
 
-### v1:
+### v6:
 There are several backward incompatible changes
 * all client functions now take `context.Context` as first argument.
 * `UserAttributeContains` was moved from client method to package function.
@@ -46,7 +46,7 @@ There are a lot of backward incompatible changes:
 ### Importing
 
 ```go
-	import "github.com/Nerzal/gocloak/v1"
+	import "github.com/Nerzal/gocloak/v6"
 ```
 
 or v3 (latest release is v3.10.0):
