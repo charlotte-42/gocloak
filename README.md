@@ -1,11 +1,11 @@
 # gocloak
 [![codebeat badge](https://codebeat.co/badges/c699bc56-aa5f-4cf5-893f-5cf564391b94)](https://codebeat.co/projects/github-com-nerzal-gocloak-master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Nerzal/gocloak)](https://goreportcard.com/report/github.com/Nerzal/gocloak)
-[![Go Doc](https://godoc.org/github.com/Nerzal/gocloak?status.svg)](https://godoc.org/github.com/Nerzal/gocloak)
-[![Build Status](https://github.com/Nerzal/gocloak/workflows/Tests/badge.svg)](https://github.com/Nerzal/gocloak/actions?query=branch%3Amaster+event%3Apush)
-[![GitHub release](https://img.shields.io/github/tag/Nerzal/gocloak.svg)](https://GitHub.com/Nerzal/gocloak/releases/)
-[![codecov](https://codecov.io/gh/Nerzal/gocloak/branch/master/graph/badge.svg)](https://codecov.io/gh/Nerzal/gocloak)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FNerzal%2Fgocloak.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FNerzal%2Fgocloak?ref=badge_shield)
+[![Go Report Card](https://goreportcard.com/badge/github.com/charlotte-42/gocloak)](https://goreportcard.com/report/github.com/charlotte-42/gocloak)
+[![Go Doc](https://godoc.org/github.com/charlotte-42/gocloak?status.svg)](https://godoc.org/github.com/charlotte-42/gocloak)
+[![Build Status](https://github.com/charlotte-42/gocloak/workflows/Tests/badge.svg)](https://github.com/charlotte-42/gocloak/actions?query=branch%3Amaster+event%3Apush)
+[![GitHub release](https://img.shields.io/github/tag/charlotte-42/gocloak.svg)](https://GitHub.com/charlotte-42/gocloak/releases/)
+[![codecov](https://codecov.io/gh/charlotte-42/gocloak/branch/master/graph/badge.svg)](https://codecov.io/gh/charlotte-42/gocloak)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcharlotte-42%2Fgocloak.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcharlotte-42%2Fgocloak?ref=badge_shield)
 
 
 Golang Keycloak API Package
@@ -14,13 +14,13 @@ This client is based on: [go-keycloak](https://github.com/PhilippHeuer/go-keyclo
 
 For Questions either raise an issue, or come to the [gopher-slack](https://invite.slack.golangbridge.org/) into the channel [#gocloak](https://gophers.slack.com/app_redirect?channel=gocloak)
 
-If u are using the echo framework have a look at [gocloak-echo](https://github.com/Nerzal/gocloak-echo)
+If u are using the echo framework have a look at [gocloak-echo](https://github.com/charlotte-42/gocloak-echo)
 
 Benchmarks: https://nerzal.github.io/gocloak/dev/bench/
 
 
 ## Contribution
-(WIP) https://github.com/Nerzal/gocloak/wiki/Contribute
+(WIP) https://github.com/charlotte-42/gocloak/wiki/Contribute
 
 ## Changelog
 
@@ -32,7 +32,7 @@ There are several backward incompatible changes
 
 ### v5:
 There is only one change, but it's backward incompatible:
-* Wrap Errors and use APIError struct to also provide the httpstatus code. ([#146](https://github.com/Nerzal/gocloak/pull/146))
+* Wrap Errors and use APIError struct to also provide the httpstatus code. ([#146](https://github.com/charlotte-42/gocloak/pull/146))
 
 ### v4:
 There are a lot of backward incompatible changes:
@@ -46,13 +46,13 @@ There are a lot of backward incompatible changes:
 ### Importing
 
 ```go
-	import "github.com/Nerzal/gocloak/v6"
+	import "github.com/charlotte-42/gocloak/v6"
 ```
 
 or v3 (latest release is v3.10.0):
 
 ```go
-	import "github.com/Nerzal/gocloak/v3"
+	import "github.com/charlotte-42/gocloak/v3"
 ```
 
 ### Create New User
@@ -321,4 +321,4 @@ docker rm gocloak-test
 ```
 
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FNerzal%2Fgocloak.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FNerzal%2Fgocloak?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcharlotte-42%2Fgocloak.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcharlotte-42%2Fgocloak?ref=badge_large)
