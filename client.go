@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/segmentio/ksuid"
 
-	"github.com/charlotte-42/gocloak/pkg/jwx"
+	"github.com/charlotte-42/gocloak/v6/pkg/jwx"
 )
 
 type gocloak struct {
