@@ -10,7 +10,7 @@ import (
 	"math/big"
 	"strings"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go" //useless comment
 	"github.com/pkg/errors"
 )
 
